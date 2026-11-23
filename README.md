@@ -1,55 +1,26 @@
 # Git Contribution Analyzer
 
-## Описание
-Этот скрипт анализирует вклад авторов в Git-репозитории, подсчитывая количество строк кода, добавленных каждым автором, и визуализируя результаты с помощью графиков.
+[Русская версия](README.ru.md)
 
-Также можно использовать файл группировки (`grouping.txt`), который позволяет объединять нескольких авторов в группы.
+A Python script that runs `git blame` on tracked files and visualizes line attribution by author or group. It describes blame attribution for the current working tree, not the total number of lines an author added throughout history or a measure of individual productivity.
 
-## Требования
-- Python 3.7+
-- Установленные библиотеки:
-  - `pandas`
-  - `matplotlib`
+## Requirements
 
-Установить зависимости можно с помощью команды:
-```sh
-pip install pandas matplotlib
+- Python 3 and Git available on `PATH`.
+- `pandas` and `matplotlib`.
+- A Git checkout whose `.git` is a directory; linked worktrees with a `.git` file are not supported by the current check.
+
+```bash
+python -m pip install pandas matplotlib
+python git_stat_script.py /path/to/repository
+python git_stat_script.py /path/to/repository --grouping-file /path/to/grouping.txt
 ```
 
-## Установка и запуск
-### 1. Клонирование репозитория (если нужно)
-```sh
-git clone <your-repo-url>
-cd <your-repo-folder>
+Without `--grouping-file`, the script looks for `grouping.txt` next to the script. Lines beginning with `#` and blank lines are ignored. Each entry maps aliases to a group:
+
+```text
+Team A: Alice, Alice Smith
+Team B: Bob
 ```
 
-### 2. Запуск анализа
-```sh
-python git_stat_script.py /path/to/git/repository
-```
-
-Дополнительно можно указать файл группировки:
-```sh
-python git_stat_script.py /path/to/git/repository --grouping-file /path/to/grouping.txt
-```
-
-## Файл группировки (grouping.txt)
-Формат файла:
-```
-Foo: foo@mail.com, foo
-Bar: Barbara, Bar
-```
-Каждый автор, указанный после `:`, будет относиться к соответствующей группе.
-
-## Выходные данные
-После выполнения анализа скрипт выводит:
-- Таблицу с количеством строк кода по авторам/группам
-- Два графика:
-  1. Гистограмма строк кода по авторам/группам
-  2. Круговая диаграмма процентного распределения
-
-## Ошибки и отладка
-Если скрипт не находит Git-репозиторий, проверьте переданный путь.
-В случае проблем с кодировкой при анализе blame, убедитесь, что файлы в репозитории имеют корректную кодировку.
-
-
+The program prints a table and displays bar and pie charts. Large repositories can take a long time because it calls `git blame` for each tracked file; files whose blame fails are skipped. Names are matched against Git's `author` field. The commands and graphical output were not tested in the current environment.
