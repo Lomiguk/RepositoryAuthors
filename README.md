@@ -25,12 +25,12 @@ cd <your-repo-folder>
 
 ### 2. Запуск анализа
 ```sh
-python git_analyzer.py /path/to/git/repository
+python git_stat_script.py /path/to/git/repository
 ```
 
 Дополнительно можно указать файл группировки:
 ```sh
-python git_analyzer.py /path/to/git/repository --grouping-file /path/to/grouping.txt
+python git_stat_script.py /path/to/git/repository --grouping-file /path/to/grouping.txt
 ```
 
 ## Файл группировки (grouping.txt)
